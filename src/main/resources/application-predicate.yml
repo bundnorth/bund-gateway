@@ -1,0 +1,41 @@
+server:
+  port: 8888
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cookie_route
+          uri: http://localhost:8888
+          predicates:
+            - Cookie=mycookie,mycookievalue
+        - id: after_route
+          uri: http://localhost:8888
+          predicates:
+            # 时间晚于after的请求
+            - After=2020-01-20T17:42:47.789-07:00[America/Denver]
+        - id: before_route
+          uri: http://localhost:8888
+          predicates:
+            # 时间早于before的请求
+            - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+        - id: between_route
+          uri: http://localhost:8888
+          predicates:
+            # 在两个时间之内的请求
+            - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+        - id: header_route
+          uri: http://localhost:8888
+          predicates:
+            - Header=X-Request-Id, \d+
+        - id: host_route
+          uri: https://example.org
+          predicates:
+            - Host=**.somehost.org,**.anotherhost.org
+        - id: method_route
+          uri: https://example.org
+          predicates:
+            - Method=GET,POST
+        - id: host_route
+          uri: https://example.org
+          predicates:
+            - Path=/red/{segment},/blue/{segment}

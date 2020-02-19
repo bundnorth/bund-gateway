@@ -1,0 +1,36 @@
+# 设置8080端口为API网关统一对外暴露端口
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+
+spring:
+  cloud:
+    gateway:
+      #      default-filters:
+      #        - name: CustomFilter
+      routes:
+        - id: apiClient
+#          uri: http://localhost:8080/
+          uri: lb://itop-api
+          predicates:
+            - Path=/gateway-api/**
+          #          filters:
+          #            - CustomFilter
+          filters:
+            - AddRequestHeader=first-request, first-request-header
+            - AddResponseHeader=first-response, first-response-header
+        - id: userClient
+#          uri: http://localhost:8083/
+          uri: lb://itop-user
+          predicates:
+            - Path=/gateway-user/**
+          #          filters:
+          #            - CustomFilter
+          filters:
+            - AddRequestHeader=second-request, second-request-header
+            - AddResponseHeader=second-response, second-response-header

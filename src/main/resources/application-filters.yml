@@ -1,0 +1,40 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: add_request_header_route
+          uri: http://localhost:8888
+          filters:
+            - AddRequestHeader=X-Request-red, blue
+        - id: add_request_header_route
+          uri: http://localhost:8888
+          predicates:
+            - Path=/red/{segment}
+          filters:
+            - AddRequestHeader=X-Request-Red, Blue-{segment}
+        - id: add_request_parameter_route
+          uri: http://localhost:8888
+          filters:
+            - AddRequestParameter=red, blue
+        - id: add_request_parameter_route
+          uri: http://localhost:8888
+          predicates:
+            - Host: {segment}.myhost.org
+          filters:
+            - AddRequestParameter=foo, bar-{segment}
+        - id: header_route
+          uri: http://localhost:8888
+          predicates:
+            - Header=X-Request-Id, \d+
+        - id: host_route
+          uri: https://example.org
+          predicates:
+            - Host=**.somehost.org,**.anotherhost.org
+        - id: method_route
+          uri: https://example.org
+          predicates:
+            - Method=GET,POST
+        - id: host_route
+          uri: https://example.org
+          predicates:
+            - Path=/red/{segment},/blue/{segment}
