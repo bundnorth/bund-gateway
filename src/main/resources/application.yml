@@ -24,6 +24,11 @@ spring:
           filters:
             - AddRequestHeader=first-request, first-request-header
             - AddResponseHeader=first-response, first-response-header
+            # 定义fallback降级
+            - name: Hystrix
+              args:
+                name: fallbackCommand
+                fallbackUri: forward:/fallback/message
         - id: userClient
 #          uri: http://localhost:8083/
           uri: lb://itop-user
